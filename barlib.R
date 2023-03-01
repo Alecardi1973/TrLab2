@@ -1,30 +1,3 @@
-# load code
-
-
-
-.baR.load <- function() 
-{
-  require(devtools) 
-  require(RCurl)
-  require(plyr)
-  require(dplyr)
-  require(XBRL)
-  require(finreportr)
-  require(ggplot2)
-  require(cowplot)
-  require(quantmod)
-  require(Rmisc)
-  require(gridExtra)
-  require(finstr)
-  
-  trw <- "https://raw.githubusercontent.com/Alecardi1973/TrLab2/master/barlib.R"
-  source_url(trw)
-  
-}
-
-
-class(.baR.load) <- "baRlib_cl" 
-
 
 ### code
 
