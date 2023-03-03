@@ -1,5 +1,6 @@
 
-### code
+# baRlib code
+
 
 
 GetURL <- function(symbol, year) 
@@ -17,11 +18,10 @@ GetURL <- function(symbol, year)
 }
 
 
-class(GetURL) <- "baRlib_cl"
+class(GetURL) <- "baR.libs"
 
 
 ###
-
 
 
 GetFinStat <- function(year, symbol)
@@ -62,14 +62,10 @@ GetFinStat <- function(year, symbol)
 }  
 
 
-class(GetFinStat) <- "baRlib_cl"
-
-
-
+class(GetFinStat) <- "baR.libs"
 
 
 ###
-
 
 
 GetFinStats <- function(symbol, years)
@@ -89,14 +85,10 @@ GetFinStats <- function(symbol, years)
 }
 
 
-class(GetFinStats) <- "baRlib_cl"
-
-
-
+class(GetFinStats) <- "baR.libs"
 
 
 ###
-
 
 
 simplify.bs <- function(bsf) 
@@ -114,13 +106,7 @@ simplify.bs <- function(bsf)
 }
 
 
-# class(simplify.bs) <- "baRlib_cl"
-
-
-
 ###
-
-
 
 
 plot.bsf <- function(bsf, prop = FALSE, psave = FALSE)
@@ -147,9 +133,7 @@ plot.bsf <- function(bsf, prop = FALSE, psave = FALSE)
 }
 
 
-
 ###
-
 
 
 plot.isf <- function(isf, dates=FALSE, prop = FALSE, psave = FALSE)
@@ -180,53 +164,7 @@ plot.isf <- function(isf, dates=FALSE, prop = FALSE, psave = FALSE)
 }
 
 
-
-
-### ratios
-
-
-fin.ratios <- function(fstats, ratios)
-{
-  tmp <- fstats %>% calculate(date = as.Date(endDate), calculations = ratios, digits = 2)
-  tmp[is.na(tmp)] <- 0
-  ans <- xts(x = tmp[,-1], order.by = as.Date(tmp[,1]))
-  
-  ans
-}
-
-
-
-##
-
-
-
-profit.margins <- calculation(
-  Gross_Margin = (SalesRevenueNet-CostOfGoodsAndServicesSold)/SalesRevenueNet,
-  Operating_Margin = OperatingIncomeLoss / SalesRevenueNet,
-  Net_Margin = NetIncomeLoss / SalesRevenueNet)
-
-
-
-
-bsf.ratios <- calculation(
-  Current_Ratio = AssetsCurrent / LiabilitiesCurrent,
-  Quick_Ratio = (CashAndCashEquivalentsAtCarryingValue + 
-                   AvailableForSaleSecuritiesCurrent +
-                   AccountsReceivableNetCurrent) / LiabilitiesCurrent)
-
-
-isf.ratios <- calculation(
-  .AccountReceivableLast = lag(AccountsReceivableNetCurrent),
-  .AccountReceivableAvg = (.AccountReceivableLast + AccountsReceivableNetCurrent)/2,
-  DaysSalesOutstanding = .AccountReceivableAvg / SalesRevenueNet * 365)
-
-
-
-
-
 ###
-
-
 
 
 horizonal.analysis <- function(fs, type, firstDate=NULL, lastDate=NULL, units = 1000, export = F)
@@ -307,14 +245,10 @@ horizonal.analysis <- function(fs, type, firstDate=NULL, lastDate=NULL, units = 
   ans
 }
 
-class(horizonal.analysis) <- "baRlib_cl"
+class(horizonal.analysis) <- "baR.libs"
 
 
-
-#######
-
-
-
+###
 
 
 vertical.analysis <- function(fs, type, total = NULL, digits = 2, export = F) 
@@ -347,15 +281,10 @@ vertical.analysis <- function(fs, type, total = NULL, digits = 2, export = F)
 }
 
 
-
-class(vertical.analysis) <- "baRlib_cl"
-
+class(vertical.analysis) <- "baR.libs"
 
 
-
-###########
-
-
+###
 
 
 make.statement <- function(template, skeleton, digits = 2) 
@@ -386,13 +315,10 @@ make.statement <- function(template, skeleton, digits = 2)
 
 
 
-class(make.statement) <- "baRlib_cl"
+class(make.statement) <- "baR.libs"
 
 
-
-
-
-###########
+###
 
 
 barTable <- function(x)
@@ -403,27 +329,63 @@ barTable <- function(x)
 }
   
   
- 
-
-############
+###
 
 
 invisible <- function(x) .Primitive("invisible")
 
 
 
-#####
+###
 
 
-
-print.baRlib_cl <- body <- function(x, ...)
+print.baR.libs <- body <- ls <- function(x, ...)
 {
   invisible(x)
 }
   
+
+
+### ratios
+
+
+fin.ratios <- function(fstats, ratios)
+{
+  tmp <- fstats %>% calculate(date = as.Date(endDate), calculations = ratios, digits = 2)
+  tmp[is.na(tmp)] <- 0
+  ans <- xts(x = tmp[,-1], order.by = as.Date(tmp[,1]))
   
-  
-  
-  
-  
-  
+  ans
+}
+
+
+###
+
+
+profit.margins <- calculation(
+  Gross_Margin = (SalesRevenueNet-CostOfGoodsAndServicesSold)/SalesRevenueNet,
+  Operating_Margin = OperatingIncomeLoss / SalesRevenueNet,
+  Net_Margin = NetIncomeLoss / SalesRevenueNet)
+
+
+
+
+bsf.ratios <- calculation(
+  Current_Ratio = AssetsCurrent / LiabilitiesCurrent,
+  Quick_Ratio = (CashAndCashEquivalentsAtCarryingValue + 
+                   AvailableForSaleSecuritiesCurrent +
+                   AccountsReceivableNetCurrent) / LiabilitiesCurrent)
+
+
+isf.ratios <- calculation(
+  .AccountReceivableLast = lag(AccountsReceivableNetCurrent),
+  .AccountReceivableAvg = (.AccountReceivableLast + AccountsReceivableNetCurrent)/2,
+  DaysSalesOutstanding = .AccountReceivableAvg / SalesRevenueNet * 365)
+
+
+###
+
+
+
+
+ 
