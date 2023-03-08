@@ -388,6 +388,7 @@ isf.ratios <- calculation(
 
 
 
+
 capm.fit <- function(x, mkt,  main = 'CAPM for some industrial stocks')
 {
                dat <- as.list(x)
@@ -401,7 +402,7 @@ capm.fit <- function(x, mkt,  main = 'CAPM for some industrial stocks')
           all.rets <- rets[, -rcol]
              lm.eq <- paste(colnames(all.rets), '~', mkt)
            lm.form <- lapply(lm.eq, formula)
-         lm.models <- lapply(lm.form, lm, data = rets, na.action = na.omit)
+         lm.models <- lapply(lm.form, lm, data = rets)
            reg.par <- lapply(lm.models, coef)
              betas <- c(1, unlist(lapply(reg.par, "[", 2)))
       names(betas) <- c(mkt, colnames(all.rets))
@@ -416,14 +417,17 @@ capm.fit <- function(x, mkt,  main = 'CAPM for some industrial stocks')
        ylim = c(min(mrets)-0.1, max(mrets)+0.1),
        ylab = 'expected returns', main = main)
   
-       text(betas[1], mrets[1],us.symbols[1],pos=3,col="red")
-       text(betas[-1], mrets[-1],us.symbols[-1],pos=3,col="blue")
+       text(betas[1], mrets[1], mkt ,pos=3,col="red")
+       text(betas[-1], mrets[-1],colnames(all.rets),pos=3,col="blue")
        abline(sml, col="darkgrey", lwd=1)
        text(x = 0.79, y = -0.01, 'Security Market Line',pos=4,col="green")
   grid(lwd=1)
   
   ans
 }
+
+
+
 
 
 ###
