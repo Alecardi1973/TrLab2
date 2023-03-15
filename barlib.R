@@ -464,7 +464,7 @@ portfolio.fit <- function(x, target = 'max.eret', rp.method = 'simplex')
                   vols <- apply(rets, 2, sd, na.rm = TRUE)
                  stats <- round(data.frame(mean_ret = means, volatility = vols), 3)
                 c.rets <- reclass(apply(X = rets, MARGIN = 2, FUN = cumsum), match.to=rets)     
-                   ans <- list(rets = rets, c.rets = c.rets, stats = stats, weights = weights)         
+                   ans <- list(rets = rets, c.rets = c.rets, opt = opt, stats = stats, weights = weights)         
   
   # plot.xts(c.rets, main = 'Cumulative returns')
   
