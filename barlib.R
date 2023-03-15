@@ -387,15 +387,15 @@ isf.ratios <- calculation(
 
 
 
-
-
-capm.fit <- function(x, mkt,  main = 'CAPM for some industrial stocks')
+capm.fit <- function(x, mkt)
 {
                dat <- as.list(x)
               ndat <- names(dat)
                 cl <- lapply(dat, "[", , 4, simplify = TRUE)
             prices <- do.call(merge, cl)
               rets <- as.xts(100*apply(log(prices), 2, diff)) 
+             out.l <- is.na(rets) | rets < -10 | rets > 10
+       rets[out.l] <- 0
     colnames(rets) <- ndat
           mkt.rets <- rets[, mkt]
               rcol <- which(ndat == mkt)
@@ -410,12 +410,13 @@ capm.fit <- function(x, mkt,  main = 'CAPM for some industrial stocks')
              mrets <- c(mmkt, apply(all.rets, 2, mean, na.rm = TRUE))
       names(mrets) <- c(mkt, colnames(all.rets))
                sml <- lm(mrets~betas)
-               ans <- round(data.frame(mean.rets = mrets, betas = betas),2)
-      
+               tmp <- round(data.frame(mean.rets = mrets, betas = betas),2)
+               ans <- list(capm=tmp, mkt = mkt.rets, stk = all.rets)
+               
   par(lwd=2)
   plot(x=betas, y=mrets, xlim = c(min(betas)-0.1, max(betas)+0.1), 
        ylim = c(min(mrets)-0.1, max(mrets)+0.1),
-       ylab = 'expected returns', main = main)
+       ylab = 'expected returns', main = '')
   
        text(betas[1], mrets[1], mkt ,pos=3,col="red")
        text(betas[-1], mrets[-1],colnames(all.rets),pos=3,col="blue")
@@ -429,7 +430,58 @@ capm.fit <- function(x, mkt,  main = 'CAPM for some industrial stocks')
 
 
 
-
 ###
 
  
+
+
+portfolio.fit <- function(x, target = 'max.eret', rp.method = 'simplex')
+{
+               mkt_ret <- x$mkt
+             asset_ret <- x$stk
+     colnames(mkt_ret) <- "market"
+             port_spec <- portfolio.spec(assets = colnames(asset_ret))
+           # port_spec <- add.constraint(portfolio = port_spec, type = "full_investment")
+             port_spec <- add.constraint(portfolio=port_spec,type="weight_sum",min_sum=0.98,max_sum=1.02)
+             port_spec <- add.constraint(portfolio = port_spec, type = "long_only")
+  
+  if(target=='min.stdv')  port_spec <- add.objective(portfolio = port_spec, type = "risk", name = "StdDev")
+  
+  if(target=='max.eret')  port_spec <- add.objective(portfolio = port_spec, type="return", name="mean")
+  
+                          print(port_spec)
+  
+                    rp <- random_portfolios(portfolio=port_spec, permutations = 1000, rp_method = rp.method)   
+  
+                   opt <- optimize.portfolio(R = asset_ret, portfolio = port_spec, 
+                                                      optimize_method = "random", rp = rp, trace = TRUE)
+  
+               weights <- extractWeights(opt)
+             portf_ret <- Return.portfolio(R = asset_returns, weights = extractWeights(opt))
+   colnames(portf_ret) <- "portfolio"
+                  rets <- aux <- merge(portf_ret, mkt_ret)
+                          rets[is.na(aux) | aux < -100 | aux > 100] <- 0                
+  
+                 means <- apply(rets, 2, mean, na.rm = TRUE)
+                  vols <- apply(rets, 2, sd, na.rm = TRUE)
+                 stats <- data.frame(mean_ret = means, volatility = vols)
+                c.rets <- reclass(apply(X = rets, MARGIN = 2, FUN = cumsum), match.to=rets)     
+                   ans <- list(rets = rets, c.rets = c.rets, stats = stats, weights = weights)         
+  
+  # plot.xts(c.rets, main = 'Cumulative returns')
+  
+  ans          
+}  
+
+
+
+
+###
+
+
+
+
+
+
+
+
