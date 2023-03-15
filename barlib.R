@@ -455,7 +455,7 @@ portfolio.fit <- function(x, target = 'max.eret', rp.method = 'simplex')
                                                       optimize_method = "random", rp = rp, trace = TRUE)
   
                weights <- round(extractWeights(opt), 3)
-             portf_ret <- Return.portfolio(R = asset_returns, weights = extractWeights(opt))
+             portf_ret <- Return.portfolio(R = asset_ret, weights = extractWeights(opt))
    colnames(portf_ret) <- "portfolio"
                   rets <- aux <- merge(portf_ret, mkt_ret)
                           rets[is.na(aux) | aux < -100 | aux > 100] <- 0                
