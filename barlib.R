@@ -435,6 +435,7 @@ capm.fit <- function(x, mkt)
  
 
 
+
 portfolio.fit <- function(x, target = 'max.eret', rp.method = 'simplex')
 {
                mkt_ret <- x$mkt
@@ -456,7 +457,7 @@ portfolio.fit <- function(x, target = 'max.eret', rp.method = 'simplex')
                    opt <- optimize.portfolio(R = asset_ret, portfolio = port_spec, 
                                                       optimize_method = "random", rp = rp, trace = TRUE)
   
-               weights <- extractWeights(opt)
+               weights <- round(extractWeights(opt), 3)
              portf_ret <- Return.portfolio(R = asset_returns, weights = extractWeights(opt))
    colnames(portf_ret) <- "portfolio"
                   rets <- aux <- merge(portf_ret, mkt_ret)
@@ -472,6 +473,7 @@ portfolio.fit <- function(x, target = 'max.eret', rp.method = 'simplex')
   
   ans          
 }  
+
 
 
 class(portfolio.fit) <- "baR.libs"
