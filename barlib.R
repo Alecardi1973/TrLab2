@@ -429,12 +429,9 @@ capm.fit <- function(x, mkt)
 
 
 
-
 ###
 
  
-
-
 
 portfolio.fit <- function(x, target = 'max.eret', rp.method = 'simplex')
 {
@@ -465,7 +462,7 @@ portfolio.fit <- function(x, target = 'max.eret', rp.method = 'simplex')
   
                  means <- apply(rets, 2, mean, na.rm = TRUE)
                   vols <- apply(rets, 2, sd, na.rm = TRUE)
-                 stats <- data.frame(mean_ret = means, volatility = vols)
+                 stats <- round(data.frame(mean_ret = means, volatility = vols), 3)
                 c.rets <- reclass(apply(X = rets, MARGIN = 2, FUN = cumsum), match.to=rets)     
                    ans <- list(rets = rets, c.rets = c.rets, stats = stats, weights = weights)         
   
@@ -477,6 +474,7 @@ portfolio.fit <- function(x, target = 'max.eret', rp.method = 'simplex')
 
 
 class(portfolio.fit) <- "baR.libs"
+
 
 
 ###
