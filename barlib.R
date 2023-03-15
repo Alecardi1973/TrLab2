@@ -474,6 +474,7 @@ portfolio.fit <- function(x, target = 'max.eret', rp.method = 'simplex')
 }  
 
 
+class(portfolio.fit) <- "baR.libs"
 
 
 ###
