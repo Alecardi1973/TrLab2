@@ -21,7 +21,7 @@ GetURL <- function(symbol, year)
 class(GetURL) <- "baR.libs"
 
 
-###
+###   
 
 
 GetFinStat <- function(year, symbol)
@@ -300,11 +300,11 @@ make.statement <- function(template, skeleton, digits = 2)
     
     # if(is.null(tmp)) parent_id <- get_ascendant(fs, col_name)[[1]]
     
-    ans[[items[i]]] <- as.numeric(fs[i,-1])
+    ans[[items[i]]] <- rev(as.numeric(fs[i,-1]))
     
     if(!missing(digits)) 
     {
-      ans[[items[i]]] <- round(as.numeric((fs[i,-1])), digits)
+      ans[[items[i]]] <- rev(round(as.numeric((fs[i,-1])), digits))
     }
   }
   
