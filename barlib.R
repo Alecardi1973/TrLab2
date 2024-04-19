@@ -70,13 +70,6 @@ class(GetFinStat) <- "baR.libs"
 ###
 
 
-@@ -88,263 +26,9 @@ GetFinStats <- function(symbol, years)
-class(GetFinStats) <- "baR.libs"
-
-
-###
-
-
 simplify.bs <- function(bsf) 
 {  
   ans <- expose(bsf,
@@ -318,7 +311,7 @@ barTable <- function(x)
 ###
 
 
-invisible <- function(x) .Primitive("invisible")
+# invisible <- function(x) .Primitive("invisible")
 
 
 
@@ -334,8 +327,9 @@ print.baR.libs <- body <- ls <- function(x, ...)
 
 ### ratios
 
-@@ -383,106 +67,3 @@ isf.ratios <- calculation(
-  DaysSalesOutstanding = .AccountReceivableAvg / SalesRevenueNet * 365)
+
+
+### let students calculate ratios manually
 
 
 ###
