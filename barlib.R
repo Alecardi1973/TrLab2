@@ -329,11 +329,46 @@ print.baR.libs <- body <- ls <- function(x, ...)
 
 
 
-### let students calculate ratios manually
+fin.ratios <- function(fstats, ratios)
+{
+  tmp <- fstats %>% calculate(date = as.Date(endDate), calculations = ratios, digits = 2)
+  tmp[is.na(tmp)] <- 0
+  ans <- xts(x = tmp[,-1], order.by = as.Date(tmp[,1]))
+  
+  ans
+}
+
+
+
+##
+
+
+
+profit.margins <- calculation(
+  Gross_Margin = (SalesRevenueNet-CostOfGoodsAndServicesSold)/SalesRevenueNet,
+  Operating_Margin = OperatingIncomeLoss / SalesRevenueNet,
+  Net_Margin = NetIncomeLoss / SalesRevenueNet)
+
+
+
+
+bsf.ratios <- calculation(
+  Current_Ratio = AssetsCurrent / LiabilitiesCurrent,
+  Quick_Ratio = (CashAndCashEquivalentsAtCarryingValue + 
+                   AvailableForSaleSecuritiesCurrent +
+                   AccountsReceivableNetCurrent) / LiabilitiesCurrent)
+
+
+isf.ratios <- calculation(
+  .AccountReceivableLast = lag(AccountsReceivableNetCurrent),
+  .AccountReceivableAvg = (.AccountReceivableLast + AccountsReceivableNetCurrent)/2,
+  DaysSalesOutstanding = .AccountReceivableAvg / SalesRevenueNet * 365)
+
+
+
 
 
 ###
-
 
 
 capm.fit <- function(x, mkt)
