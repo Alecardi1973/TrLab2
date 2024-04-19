@@ -318,7 +318,7 @@ barTable <- function(x)
 ###
 
 
-print.baR.libs <- body <- ls <- function(x, ...)
+print.baR.libs <- body <- function(x, ...)
 {
   invisible(x)
 }
